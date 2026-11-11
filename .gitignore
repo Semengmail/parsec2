@@ -1,0 +1,47 @@
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Node / JS
+**/node_modules/
+**/.pnpm-store/
+**/.npm/
+**/.cache/
+
+# Build artifacts
+**/dist/
+**/.next/
+**/out/
+**/build/
+**/.turbo/
+**/coverage/
+**/tmp/
+**/*.log
+
+# Next.js
+# (не игнорируем все *.local; будем точнее для env ниже)
+.vercel/
+
+# Env (секреты не коммитим)
+**/.env
+**/.env.local
+**/.env.*.local
+infra/.env
+infra/.env.local
+# Разрешаем только примеры:
+!**/.env.example
+!infra/.env.example
+!parsecclient/.env.local.example
+!parsecback/.env.example
+
+# Docker
+# .dockerignore лучше хранить в репо
+# **/.dockerignore        # <- НЕ игнорируем
+**/dockerfiles/
+# **/Dockerfile*          # <- тоже обычно не игнорируем
+
+# Misc
+**/.eslintcache

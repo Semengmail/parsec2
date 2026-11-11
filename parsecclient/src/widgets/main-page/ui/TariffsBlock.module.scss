@@ -1,0 +1,204 @@
+.tariffs {
+  width: 100%;
+  // background-color: #f4f8fb;
+}
+
+.noWrap {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tariffsWrapper {
+  text-align: center;
+  padding-bottom: 80px;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  font-family: var(--font-manrope), sans-serif;
+  h2 {
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 57.37px;
+    color: #3d4a56;
+    margin: 90px auto 30px;
+  }
+
+  .tariffTitle {
+    display: flex;
+    flex-direction: column;
+    .discount {
+      font-size: 14px;
+      color: #3d4a56;
+    }
+  }
+
+  .tariffsItems {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    margin-top: 20px;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .tariffBlock {
+    flex-grow: 1;
+    flex-basis: auto;
+    min-width: 100px;
+    max-width: 160px;
+    background: #fff;
+    padding: 18px;
+    border-radius: 7px;
+    // box-sizing: border-box;
+    text-align: center;
+
+    &:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      display: block;
+      margin: 0 auto 11px;
+    }
+
+    h3 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #3d4a56;
+      line-height: 30px;
+      margin-bottom: 24px;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    .tariffDetails {
+      display: grid;
+      gap: 1rem;
+      grid-auto-rows: -webkit-min-content;
+      grid-auto-rows: min-content;
+
+      .tariffRow {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 12px;
+        // line-height: 24.59px;
+        color: #3d4a56;
+        width: 100%;
+        height: 60px;
+
+        .itemLimitPriceTitle,
+        .itemTariffPriceTitle {
+          display: none;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 19.12px;
+          text-align: center;
+        }
+
+        .unit {
+          font-weight: 400;
+          font: optional;
+        }
+      }
+    }
+  }
+
+  .legend {
+    background-color: transparent;
+    padding-top: 190px;
+    position: relative;
+
+    h3 {
+      margin: 0;
+      position: absolute;
+      top: 100px;
+      font-weight: 400;
+    }
+
+    .tariffDetails {
+      .tariffRow {
+        text-align: left;
+        justify-content: flex-start;
+        // height: 30px;
+        span,
+        strong {
+          font-size: 15px;
+          font-weight: 400;
+          line-height: 20.49px;
+          color: #616872;
+        }
+      }
+    }
+  }
+
+  .offer {
+    margin-top: 40px;
+  }
+
+  .buttonBlock {
+    margin-top: 40px;
+    // margin-bottom: 100px;
+    text-align: center;
+
+    > p {
+      font-family: var(--font-manrope), sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 21.75px;
+      text-align: center;
+      color: #616872;
+
+      span {
+        color: #1975ff;
+      }
+    }
+  }
+
+  @media screen and (max-width: 740px) {
+    padding-bottom: 60px;
+
+    h2 {
+      font-size: 28px;
+      line-height: 38.25px;
+      margin-bottom: 20px;
+      margin-top: 60px;
+    }
+
+    .legend {
+      display: none;
+    }
+
+    .tariffBlock {
+      background-color: #f4f8fb;
+
+      img {
+        margin-bottom: 5px;
+      }
+
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .tariffDetails {
+        gap: 15px;
+
+        .tariffRow {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+
+          .itemTariffPriceTitle,
+          .itemLimitPriceTitle {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
+}

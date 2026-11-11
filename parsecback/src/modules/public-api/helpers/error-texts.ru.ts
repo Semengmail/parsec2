@@ -1,0 +1,23 @@
+// src/modules/public-api/helpers/error-texts.ru.ts
+export const ERROR_TEXTS_RU: Record<string, string> = {
+  empty_query: 'Пустой поисковый запрос',
+  invalid_lr: 'Неверный код региона (lr)',
+  invalid_device: 'Неверный тип устройства (desktop|mobile)',
+  invalid_groupby: 'Неверный параметр groupby (10|20|30|50|100)',
+  invalid_domain: 'Неверный домен/зона',
+  bad_request_id: 'Неверный идентификатор запроса (req_id)',
+  insufficient_funds: 'Недостаточно средств на счете',
+  payment_required: 'Недостаточно средств на счете',
+  queue_overloaded: 'Сервис перегружен, попробуйте позже',
+  rate_limited: 'Слишком много запросов (rate limit), попробуйте позже',
+  quota_exceeded: 'Превышена квота, попробуйте позже',
+  transient_fetch_failed: 'Временная ошибка сети, попробуйте позже',
+  remote_error: 'Ошибка на стороне внешнего сервиса',
+  bad_params: 'Некорректные параметры запроса',
+  missing_externalTaskId: 'Не удалось инициализировать задачу',
+  task_not_found: 'Задача не найдена',
+  no_results: 'Результаты не найдены',
+  internal_error: 'Внутренняя ошибка',
+  bad_api_key: 'Неверный или заблокированный API-ключ',
+  engine_blocked: 'Поисковая система временно недоступна. Мы уже разбираемся.',
+};

@@ -1,0 +1,247 @@
+.referralInfoContainer {
+  display: flex;
+  box-shadow: 0px 5px 25px 0px rgba(61, 74, 86, 0.15);
+  width: 100%;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.referralInfoLinksContainer {
+  width: 630px;
+  padding: 30px 35px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-family: var(--font-manrope), sans-serif;
+
+  .referralReward {
+    background: rgba(25, 117, 255, 1) url(/img/revard-bg.svg) 100% 100%;
+    border-radius: 7px;
+    padding: 30px 35px;
+    color: white;
+    max-height: 165px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    .referralRewardLeft {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .referralTitle {
+        font-weight: 600;
+        font-size: 17px;
+      }
+
+      .referralRewardSum {
+        font-weight: 600;
+        font-size: 42px;
+      }
+    }
+  }
+}
+
+.referralInfoItem {
+  border-radius: 7px;
+  background-color: rgba(244, 248, 251, 1);
+  padding: 20px;
+  width: 100%;
+  font-family: var(--font-manrope), sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .linkLabel {
+    color: rgba(61, 74, 86, 1);
+    font-weight: 600;
+    font-size: 17px;
+  }
+
+  .inputBlock {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: nowrap;
+    border-radius: 7px;
+    .input {
+      height: 50px;
+      width: calc(100% - 70px);
+      margin-right: -5px;
+      border: none;
+      padding: 0px 15px;
+      border-radius: 7px;
+      &:focus {
+        outline: none;
+      }
+    }
+    .copyButton {
+      min-width: 165px;
+      height: 50px;
+      background-color: rgba(231, 240, 248, 1);
+      border: none;
+      border-radius: 7px;
+      padding: 0;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+
+      color: rgba(25, 117, 255, 1);
+      font-weight: 600;
+      font-size: 16px;
+      &:hover {
+        background-color: rgba(231, 240, 248, 0.692);
+      }
+      &:active {
+        background-color: rgba(231, 240, 248, 0.175);
+      }
+    }
+  }
+}
+
+.referralInfoRulesContainer {
+  flex: 1;
+  background-color: rgba(231, 240, 248, 1);
+  padding: 40px;
+  height: 100%;
+  box-sizing: border-box;
+  color: rgba(97, 104, 114, 1);
+
+  .referralInfoHeader {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    margin-top: 0px;
+    margin-bottom: 20px;
+  }
+
+  .referralInfoList {
+    padding-left: 26px;
+    margin-bottom: 40px;
+    li {
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 145%;
+      margin-bottom: 12px;
+    }
+    a {
+      color: #1975ff;
+    }
+  }
+
+  .referralInfoDiscountsContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .referralInfoDiscountsContainerInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      span {
+        height: 34px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        font-family: var(--font-manrope), sans-serif;
+        font-weight: 600;
+        font-size: 15px;
+
+        &.referralInfoDiscountsContainerInfoLabel {
+          background-color: white;
+          width: 105px;
+          height: 38px;
+          border-radius: 7px;
+
+          font-weight: 600;
+          font-size: 17px;
+          color: rgba(25, 117, 255, 1);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .referralInfoContainer {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .referralInfoLinksContainer {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .referralReward {
+    padding: 20px;
+    max-height: none;
+
+    .referralRewardLeft {
+      gap: 10px;
+
+      .referralTitle {
+        font-size: 15px;
+      }
+
+      .referralRewardSum {
+        font-size: 32px;
+      }
+    }
+  }
+
+  .referralInfoItem {
+    padding: 16px;
+
+    .linkLabel {
+      font-size: 15px;
+    }
+
+    .inputBlock {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+
+      .input {
+        width: 100%;
+        margin-right: 0;
+      }
+
+      .copyButton {
+        width: 100%;
+        min-width: unset;
+        height: 44px;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .referralInfoRulesContainer {
+    .referralInfoDiscountsContainer {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      justify-items: center;
+    }
+
+    .referralInfoDiscountsContainerInfo {
+      align-items: center;
+      gap: 6px;
+    }
+  }
+}

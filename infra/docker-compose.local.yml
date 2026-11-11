@@ -1,0 +1,5 @@
+# Only for a new/explicitly approved local stage; production does not publish Redis.
+services:
+  redis:
+    ports:
+      - "127.0.0.1:${LOCAL_REDIS_PORT:-6379}:6379"

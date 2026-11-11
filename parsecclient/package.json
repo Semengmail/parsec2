@@ -1,0 +1,82 @@
+{
+  "name": "parsecclient",
+  "version": "0.1.1",
+  "description": "Parsing site",
+  "private": true,
+  "scripts": {
+    "dev:stage": "next dev --turbopack",
+    "dev": "next dev --turbopack --hostname parsec.toolzar.localhost --port 3020",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0 && npm run typecheck",
+    "lint:fix": "eslint . --fix --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@mantine/charts": "^8.3.8",
+    "@mantine/core": "^8.3.8",
+    "@mantine/dates": "^8.3.8",
+    "@mantine/form": "^8.3.8",
+    "@mantine/hooks": "^8.3.8",
+    "@mantine/modals": "^8.3.8",
+    "@mantine/notifications": "^8.3.8",
+    "@tabler/icons-react": "^3.35.0",
+    "@types/lodash-es": "^4.17.12",
+    "dayjs": "^1.11.13",
+    "highcharts": "^12.4.0",
+    "highcharts-react-official": "^3.2.3",
+    "immer": "^10.1.1",
+    "js-cookie": "^3.0.8",
+    "lodash-es": "^4.18.1",
+    "next": "^15.5.19",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "sass": "^1.93.3",
+    "zustand": "^5.0.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@eslint/js": "^9.39.5",
+    "@iconify/react": "^6.0.2",
+    "@types/js-cookie": "^3.0.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
+    "@typescript-eslint/parser": "^8.72.2",
+    "eslint": "^9",
+    "eslint-config-next": "^15.5.29",
+    "postcss": "^8.5.15",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "^5"
+  },
+  "overrides": {
+    "ajv": "^6.14.0",
+    "flatted": "^3.4.2",
+    "immutable": "^5.1.5",
+    "micromatch": {
+      "picomatch": "^2.3.2"
+    },
+    "tinyglobby": {
+      "picomatch": "^4.0.4"
+    },
+    "fdir": {
+      "picomatch": "^4.0.4"
+    },
+    "next": {
+      "postcss": "^8.5.23"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^9.0.7",
+      "brace-expansion": "^2.1.7"
+    },
+    "minimatch": {
+      ".": "^3.1.4",
+      "brace-expansion": "^1.1.21"
+    },
+    "minimatch@^9.0.0": {
+      "brace-expansion": "^2.1.7"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+.tgmeWidgetLoginButton {
+  font-size: 16px;
+  line-height: 20px;
+  padding: 9px 21px 11px;
+  border-radius: 20px;
+  font-family: 'Arial';
+  font-weight: 500;
+  height: 40px;
+}
+
+.tgmeWidgetLoginButton {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  border-radius: 17px;
+  background-color: #54a9eb;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  padding: 7px 16px 6px;
+  margin: 0;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tgmeWidgetLoginButton .tgme_widget_login_button_icon {
+  width: 24px;
+  height: 22px;
+  margin: 0 13px -2px -7px;
+}
+
+.tgmeWidgetLoginButton .tgme_widget_login_button_icon,
+.dsd {
+  background: url('/img/tgIcon.svg') no-repeat 0 -1px;
+}
+.tgme_widget_login_button_icon {
+  display: inline-block;
+  vertical-align: top;
+  background: no-repeat 0 0;
+}

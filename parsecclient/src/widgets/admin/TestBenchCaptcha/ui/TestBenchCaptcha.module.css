@@ -1,0 +1,25 @@
+.serverHeader {
+  width: fit-content;
+}
+
+.deleteButton {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.serverHeader:hover .deleteButton,
+.serverHeader:focus-within .deleteButton {
+  opacity: 0.65;
+}
+
+.deleteButton:hover,
+.deleteButton:focus-visible {
+  opacity: 1;
+}
+
+.reportTextarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  line-height: 1.45;
+  white-space: pre;
+}

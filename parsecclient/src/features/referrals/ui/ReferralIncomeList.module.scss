@@ -1,0 +1,81 @@
+.incomeListContainer {
+  width: 100%;
+}
+
+.incomeListHeader {
+  color: rgba(61, 74, 86, 1);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 140%;
+  margin: 0 0 20px;
+}
+
+.incomeListTable {
+  background-color: rgba(244, 248, 251, 1);
+  border-radius: 7px;
+  width: 100%;
+  margin-bottom: 50px;
+
+  thead {
+    th {
+      border-bottom: 2px solid rgba(231, 240, 248, 1);
+      font-weight: 600;
+      color: rgba(61, 74, 86, 1);
+      font-size: 17px;
+      padding: 25px;
+      text-align: left;
+    }
+  }
+
+  tbody {
+    tr {
+      td {
+        font-weight: 400;
+        font-size: 17px;
+        line-height: 140%;
+        color: rgba(52, 73, 94, 1);
+        text-align: left;
+        border-bottom: 1px solid rgba(231, 240, 248, 1);
+        padding: 15px 25px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .incomeListTable {
+    thead {
+      display: none;
+    }
+
+    tbody {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    tr {
+      display: block;
+      background-color: #fff;
+      border-radius: 7px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 6px 0;
+      border: none;
+      font-size: 14px;
+
+      &::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: rgba(97, 104, 114, 1);
+      }
+    }
+  }
+}

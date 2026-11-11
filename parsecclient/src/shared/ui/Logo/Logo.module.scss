@@ -1,0 +1,13 @@
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  &:visited {
+    color: #333;
+  }
+  &:hover {
+    color: #33333359;
+  }
+}

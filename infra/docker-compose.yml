@@ -1,0 +1,162 @@
+name: parsec
+
+networks:
+  appnet: {}
+
+volumes:
+  pg_data:
+
+x-common-env: &common-env
+  env_file:
+    - ./.env
+
+services:
+  db:
+    image: ${TIMESCALE_IMAGE:-timescale/timescaledb:2.31.0-pg17}
+    container_name: parsec_db
+    restart: always
+    mem_limit: ${DB_MEMORY_LIMIT:-1g}
+    cpus: ${DB_CPU_LIMIT:-1.0}
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_DB: ${DB_NAME:-parsecback}
+      POSTGRES_USER: ${DB_USER:-parsec}
+      POSTGRES_PASSWORD: ${DB_PASS:?set in .env}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      TS_TUNE_MEMORY: ${TS_TUNE_MEMORY:-512MB}
+      TS_TUNE_NUM_CPUS: ${TS_TUNE_NUM_CPUS:-1}
+      TS_TUNE_MAX_CONNS: ${TS_TUNE_MAX_CONNS:-60}
+    ports:
+      - "${DB_BIND:-0.0.0.0}:${DB_PORT:-5433}:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./db:/etc/postgresql/parsec:ro
+    command:
+      - "-c"
+      - "hba_file=/etc/postgresql/parsec/pg_hba.conf"
+      - "-c"
+      - "logging_collector=on"
+      - "-c"
+      - "log_directory=/var/log/postgresql"
+      - "-c"
+      - "log_filename=postgresql-%a.log"
+      - "-c"
+      - "log_rotation_age=1d"
+      - "-c"
+      - "log_truncate_on_rotation=on"
+      - "-c"
+      - "log_line_prefix=%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h"
+      - "-c"
+      - "log_statement=none"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    networks: [appnet]
+
+  redis:
+    image: redis:8.2.0-alpine
+    container_name: parsec_redis
+    restart: always
+    env_file:
+      - ./.env
+    command:
+      [
+        "redis-server",
+        "--save",
+        "",
+        "--appendonly",
+        "no",
+        "--requirepass",
+        "${REDIS_PASSWORD}",
+      ]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --no-auth-warning -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    networks: [appnet]
+
+  parsecback:
+    <<: *common-env
+    build:
+      context: ../parsecback
+    container_name: parsec_back
+    restart: always
+    ports:
+      - "${BIND_ADDR:?set BIND_ADDR in .env}:7101:7001"
+    ulimits:
+      nofile:
+        soft: 200000
+        hard: 200000
+    # env_file:
+    #   - ./.env
+
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 7001
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-parsec}
+      DB_PASS: ${DB_PASS:?set in .env}
+      DB_NAME: ${DB_NAME:-parsecback}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      STUB_MODE: ${STUB_MODE:-false}
+      TYPEORM_SYNC: ${TYPEORM_SYNC:-false}
+      HTTP_ACCESS_LOG_ENABLED: ${HTTP_ACCESS_LOG_ENABLED:-false}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    networks: [appnet]
+
+  parsecclient:
+    build:
+      context: ..
+      dockerfile: parsecclient/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+        NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+        NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+        NEXT_PUBLIC_MAIN_PAGE_URL: ${NEXT_PUBLIC_MAIN_PAGE_URL}
+        NEXT_PUBLIC_COOKIE_NAME: ${NEXT_PUBLIC_COOKIE_NAME:-psk.sid}
+        NEXT_PUBLIC_STUB_MODE: ${NEXT_PUBLIC_STUB_MODE:-false}
+    ports:
+      - "${BIND_ADDR:?set BIND_ADDR in .env}:3020:3000"
+    container_name: parsec_web
+    restart: always
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXT_PUBLIC_API_BASE: ${NEXT_PUBLIC_API_BASE}
+      NEXT_PUBLIC_STUB_MODE: ${NEXT_PUBLIC_STUB_MODE:-false}
+      PORT: 3000
+    depends_on: [parsecback]
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    networks: [appnet]
+
