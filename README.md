@@ -62,7 +62,9 @@ Lint работает без автоматического исправлени
 Инструкции восстановления БД, IP allowlist, безопасного деплоя и добавления
 доменов в nginx klaster-key — в [infra/README.md](infra/README.md).
 Секреты хранятся только в `/opt/parsec/infra/.env` (chmod 600), в Git — примеры.
-TYPEORM_SYNC=false обязателен на восстановленной базе. Куки `psk.sid` на `.toolzar.ru`.
+TYPEORM_SYNC=true (решение Nick от 12.11.2026): схема при старте бэкенда приводится
+к entities. Перед выкладкой изменений entities снимать бэкап — см. infra/README.md.
+Куки `psk.sid` на `.toolzar.ru`.
 
 После первого развёртывания обновление приложения:
 

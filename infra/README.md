@@ -10,7 +10,7 @@ Production — только после команды Nick, внешнего р�
 Сохранить исходный API_KEY_ENC_SECRET (64 hex-символа) для расшифровки старых ключей.
 JWT_SECRET и RESET_PASSWORD_SECRET обязательны; SESSION_SECRET не заменяет JWT_SECRET.
 SMTP: SUPPORT_EMAIL_HOST/USER/PASSWORD и SUPPORT_EMAIL. STUB_MODE=true,
-NEXT_PUBLIC_STUB_MODE=true, TYPEORM_SYNC=false. Внешние интеграции в примере пустые.
+NEXT_PUBLIC_STUB_MODE=true, TYPEORM_SYNC=true. Внешние интеграции в примере пустые.
 Публичное API оставлено прежним и может обращаться к провайдерам по явным запросам.
 
 На production проверить `docker network inspect klaster-key_default`: ожидаемый
@@ -182,3 +182,53 @@ python3 /opt/parsec/infra/scripts/nginx-append-patch.py /opt/parsec/backups/ngin
 применять отдельный allowlist-скрипт. Удаление старого NPM — только если он
 действительно принадлежит Парсеку и отдельно согласовано; чужие контейнеры
 и «orphans» скрипт не удаляет.
+
+## Синхронизация схемы (TYPEORM_SYNC=true)
+
+При каждом старте бэкенд сравнивает entities со схемой БД и выполняет нужный DDL.
+Добавление nullable-поля безопасно. Удаление или переименование поля, смена типа,
+удаление entity приводят к DROP/ALTER с потерей данных без вопросов.
+На дампе от 19.08.2026 схема совпала с entities: синхронизация выполнила только
+`ALTER TABLE "users" ADD "lastSeenAt"`, повторный старт — без DDL.
+
+Перед выкладкой, меняющей entities:
+
+```bash
+cd /opt/parsec/infra
+docker compose exec -T db sh -ec 'pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc -f /tmp/pre-deploy.dump'
+docker cp parsec_db:/tmp/pre-deploy.dump /opt/parsec/backups/pre-deploy-$(date +%F).dump
+```
+
+Список DDL заранее виден на копии: запустить бэкенд с `DB_LOGGING=true` и найти
+в логе строки `query: ALTER|DROP|CREATE`. Вернуть ручной режим — `TYPEORM_SYNC=false`
+в `.env` и пересоздать только backend.
+
+## Статистика интереса
+
+Выкладка заглушки — 11.11.2026. В `users`: `createdAt` — регистрация,
+`lastLoginAt`/`authCount` — вход по паролю, `lastSeenAt` — последний визит
+с действующей сессией (пишется из `/auth/me` не чаще раза в 5 минут; появилось
+12.11.2026, для более ранних визитов пусто). Недействительная cookie на заглушке
+сбрасывается и ведёт на `/login`, поэтому старый клиент учитывается после входа.
+
+```bash
+docker compose exec -T db sh -c 'psql -X -U "$POSTGRES_USER" -d "$POSTGRES_DB"' <<'SQL'
+WITH u AS (
+  SELECT * FROM users
+  WHERE email NOT LIKE 'k911+%' AND email NOT LIKE '%@example.%'
+)
+SELECT
+  count(*) FILTER (WHERE "createdAt" >= '2026-11-11')                   AS new_registered,
+  count(*) FILTER (WHERE "createdAt" >= '2026-11-11'
+                     AND ("authCount" > 1
+                          OR "lastSeenAt"::date > "createdAt"::date))  AS new_returned,
+  count(*) FILTER (WHERE "createdAt" <  '2026-11-11'
+                     AND greatest("lastLoginAt", "lastSeenAt") >= '2026-11-11') AS old_came_back,
+  count(*) FILTER (WHERE "createdAt" <  '2026-11-11')                   AS old_total
+FROM u;
+SQL
+```
+
+`new_returned` — зарегистрировались после выкладки и зашли ещё раз (повторный
+вход или визит в другой день). Регистрация без подтверждения email: ботов
+и опечатки отсеивать вручную по списку адресов.

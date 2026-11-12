@@ -7,6 +7,17 @@ export interface ApiErrorPayload {
   errors?: Record<string, string[] | string>;
 }
 
+/** Ошибка API с HTTP-статусом: позволяет отличить 401 от сбоя сети. */
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+  ) {
+    super(message);
+    this.name = 'ApiError';
+  }
+}
+
 function isApiErrorPayload(x: unknown): x is ApiErrorPayload {
   if (typeof x !== 'object' || x === null) return false;
   const m = (x as { message?: unknown }).message;
@@ -75,12 +86,15 @@ export async function apiFetch<T>(
         : [payload.message];
       const composed =
         (payload.code ? `[${payload.code}] ` : '') + msgArray.join(', ');
-      throw new Error(composed);
+      throw new ApiError(composed, res.status);
     }
 
     const extra =
       typeof payload === 'string' ? ` — ${payload.slice(0, 200)}` : '';
-    throw new Error(`API ${res.status} ${res.statusText}${extra}`);
+    throw new ApiError(
+      `API ${res.status} ${res.statusText}${extra}`,
+      res.status,
+    );
   }
 
   // 204/205/пустой ответ — позволяем вызывать с T=void

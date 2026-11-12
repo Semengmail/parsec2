@@ -4,6 +4,7 @@ import {
   BadRequestException,
   NotFoundException,
   Inject,
+  Logger,
 } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import type { Cache } from 'cache-manager';
@@ -25,6 +26,8 @@ import { ReferralService } from '../referral/referral.service';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @InjectRepository(User) private readonly repo: Repository<User>,
     @InjectRepository(Tariff) private readonly tariffRepo: Repository<Tariff>,
@@ -40,9 +43,34 @@ export class UsersService {
       .set({
         authCount: () => '"authCount" + 1',
         lastLoginAt: () => 'NOW()',
+        lastSeenAt: () => 'NOW()',
       })
       .where('id = :id', { id: userId })
       .execute();
+  }
+
+  /**
+   * Отмечает визит с действующей сессией. Пишет не чаще раза в 5 минут на
+   * пользователя и не трогает updatedAt. Сбой статистики не должен ломать
+   * авторизацию, поэтому ошибки только логируются.
+   */
+  async touchLastSeen(userId: number): Promise<void> {
+    try {
+      await this.repo.query(
+        `UPDATE ${this.repo.metadata.tablePath}
+            SET "lastSeenAt" = NOW()
+          WHERE id = $1
+            AND ("lastSeenAt" IS NULL
+                 OR "lastSeenAt" < NOW() - INTERVAL '5 minutes')`,
+        [userId],
+      );
+    } catch (error) {
+      this.logger.warn(
+        `lastSeenAt не обновлён для user=${userId}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
   }
 
   async create(dto: CreateUserDto): Promise<{ user: User; apiKey: string }> {

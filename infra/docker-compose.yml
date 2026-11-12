@@ -117,7 +117,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       STUB_MODE: ${STUB_MODE:-false}
-      TYPEORM_SYNC: ${TYPEORM_SYNC:-false}
+      TYPEORM_SYNC: ${TYPEORM_SYNC:-true}
       HTTP_ACCESS_LOG_ENABLED: ${HTTP_ACCESS_LOG_ENABLED:-false}
     depends_on:
       db:

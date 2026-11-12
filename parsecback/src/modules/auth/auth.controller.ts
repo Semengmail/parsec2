@@ -138,6 +138,8 @@ export class AuthController {
     if (!isUserLike(candidate)) {
       throw new UnauthorizedException('user_not_found');
     }
+    // Клиент вызывает /auth/me при каждой загрузке страницы: это отметка визита.
+    void this.users.touchLastSeen(candidate.id);
 
     const {
       id,

@@ -80,6 +80,10 @@ export class User {
   @Column({ type: 'timestamptz', nullable: true })
   lastLoginAt!: Date | null;
 
+  /** Последний визит с действующей сессией (вход по паролю или по cookie). */
+  @Column({ type: 'timestamptz', nullable: true })
+  lastSeenAt!: Date | null;
+
   @Column({ type: 'varchar', length: 64, nullable: true })
   softId!: string | null;
 
