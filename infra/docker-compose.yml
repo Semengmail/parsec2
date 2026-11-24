@@ -142,6 +142,7 @@ services:
         NEXT_PUBLIC_MAIN_PAGE_URL: ${NEXT_PUBLIC_MAIN_PAGE_URL}
         NEXT_PUBLIC_COOKIE_NAME: ${NEXT_PUBLIC_COOKIE_NAME:-psk.sid}
         NEXT_PUBLIC_STUB_MODE: ${NEXT_PUBLIC_STUB_MODE:-false}
+        PARSEC_LANDING_URL: ${PARSEC_LANDING_URL:-}
     ports:
       - "${BIND_ADDR:?set BIND_ADDR in .env}:3020:3000"
     container_name: parsec_web
